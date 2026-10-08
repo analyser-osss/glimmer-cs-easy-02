@@ -88,14 +88,322 @@ typedef struct PerInfo
 调整顺序变为32个字节。原因：name[10] 占 0-9；double height 必须从 8 的倍数地址开始，地址 10-15 被迫留空，height 占 16-23；char sex 占 24；int age 必须从 4 的倍数地址开始，地址 25-27 留空，age 占 28-31。总大小为 32 字节。
 
 
+# Step 2：链操作
+1.链表：链表是动态分配，用malloc申请内存，再存储数据，大小理论无上限，可随时增减，每创建一个节点会存一个next指针，消耗内存。节点分散在各处，靠指针相连。访问效率低，必需遍历。插入删除效率高于数组。
+
+数组：静态分配，先定好大小再存储，大小固定，内存连续。可随机访问，效率高。插入删除会移动所有元素，效率低，内存无额外开销。
+
+2.单向链表节点由两部分组成：数据域和指针域。数据域存储数据，指针域存储下一节点的地址并连接节点，只能单向遍历。
+
+定义一个只存储一个整数的单向链表节点：
+
+
+typedef struct Node
+
+{
+
+    int data;
+
+    struct Node *next;
+
+}Node;
+
+
+设计create_node函数：
+
+
+Node* create_node(int value)
+
+{
+
+    Node* p=(Node*)malloc(sizeof(Node));
+
+    if (p==NULL)
+
+    {
+
+        return NULL;
+
+    }
+
+    p->data=value;
+
+    p->next=NULL;
+
+    return p;
+
+}
+
+
+头插函数：
+
+
+void insert_head(Node** head, int value) 
+
+{
+
+    Node* p = create_node(value);
+
+    if (p == NULL) 
+
+    {
+
+        return;
+
+    }
+
+    p->next = *head;
+
+    *head = p;
+
+}
+
+
+尾插函数：
+
+   
+
+void insert_tail(Node**head,int value)
+
+{
+
+    Node*p=create_node(value);
+
+    if (p==NULL)
+
+    return;
+
+    else if(*head==NULL)
+
+    {
+
+        *head=p;
+
+        return;
+
+    }
+
+    else
+
+    {
+        Node*current=*head;
+
+        while(current->next!=NULL)
+
+        {
+
+            current=current->next;
+
+        }
+
+        current->next = p;
+
+    }
+
+}
+
+
+打印：
+
+
+void printf_list(Node*head)
+
+{
+
+    Node*current=head;
+
+    while(current!=NULL)
+
+    {
+
+        printf("%d->",current->data);
+
+        current=current->next;
+
+    }
+
+    printf("NULL\n");
+
+}
 
 
 
+查找：
+
+
+int find_node(Node*head,int a)
+
+{
+
+    Node*current=head;
+
+    int b=1;
+
+    while(current!=NULL)
+
+    {
+
+        if(current->data==a)
+
+        {
+
+        return b;
+
+        }
+
+        else 
+
+        {
+            b++;
+
+            current=current->next;
+
+        }
+
+    }
+
+    return -1;
+
+}
 
 
 
+删除：
 
 
+int delete_node(Node**head,int n)
+
+{
+
+    if(*head==NULL||n<1)
+
+    {
+
+        return 0;
+
+    }
+
+    if(n==1)
+
+    {
+
+        Node*temp=*head;
+
+        *head=(*head)->next;
+
+        free(temp);
+
+        return 1;
+
+    }
+
+    Node*a=*head;
+
+    Node*b=(*head)->next;
+
+    int x=2;
+
+    while(b!=NULL&&x<n)
+
+    {
+
+        a=b;
+
+        b=b->next;
+
+        x++;
+
+    }
+
+    if(b==NULL)
+
+    {
+
+        return 0;
+
+    }
+
+    a->next=b->next;
+
+    free(b);
+
+    return 1;
+
+}
+
+
+修改：
+
+
+
+int update_node(Node*head,int old_val,int new_val)
+
+{
+
+    Node*current=head;
+
+    while(current->data!=old_val&&current!=NULL)
+
+    {
+
+        current=current->next;
+
+    }
+
+    if (current!=NULL)
+
+    {
+
+    current->data=new_val;
+
+    return 1;
+
+    }
+
+    else
+
+    {
+
+        return 0;
+
+    }
+
+}
+
+
+反转：
+
+
+
+Node*reverse_list(Node*head)
+
+{
+
+    Node*prev=NULL;
+
+    Node*current=head;
+
+    Node*next=NULL;
+
+
+
+    while(current!=NULL)
+
+    {
+
+        next=current->next;
+
+        current->next=prev;
+
+        prev=current;
+
+        current=next;
+
+    }
+
+    return prev;
+
+}
 
 
 
