@@ -229,58 +229,90 @@ void free_list(Node*head)\
     }
 }
 
-int find_node(Node*head,int a)
+// int find_node(Node*head,int a)
+// {
+//     Node*current=head;
+//     int b=1;
+//     while(current!=NULL)
+//     {
+//         if(current->data==a)
+//         {
+//         return b;
+//         }
+//         else 
+//         {
+//             b++;
+//             current=current->next;
+//         }
+//     }
+//     return -1;
+// }
+
+
+// int delete_node(Node**head,int n)
+// {
+//     if(*head==NULL||n<1)
+//     {
+//         return 0;
+//     }
+//     if(n==1)
+//     {
+//         Node*temp=*head;
+//         *head=(*head)->next;
+//         free(temp);
+//         return 1;
+//     }
+//     Node*a=*head;
+//     Node*b=(*head)->next;
+//     int x=2;
+//     while(b!=NULL&&x<n)
+//     {
+//         a=b;
+//         b=b->next;
+//         x++;
+//     }
+//     if(b==NULL)
+//     {
+//         return 0;
+//     }
+//     a->next=b->next;
+//     free(b);
+//     return 1;
+// }
+
+// int update_node(Node*head,int old_val,int new_val)
+// {
+//     Node*current=head;
+//     while(current->data!=old_val&&current!=NULL)
+//     {
+//         current=current->next;
+//     }
+//     if (current!=NULL)
+//     {
+//     current->data=new_val;
+//     return 1;
+//     }
+//     else
+//     {
+//         return 0;
+//     }
+// }
+
+Node*reverse_list(Node*head)
 {
+    Node*prev=NULL;
     Node*current=head;
-    int b=1;
+    Node*next=NULL;
+
     while(current!=NULL)
     {
-        if(current->data==a)
-        {
-        return b;
-        }
-        else 
-        {
-            b++;
-            current=current->next;
-        }
+        next=current->next;
+        current->next=prev;
+        prev=current;
+        current=next;
     }
-    return -1;
+    return prev;
 }
-
-
-int delete_node(Node**head,int n)
-{
-    if(*head==NULL||n<1)
-    {
-        return 0;
-    }
-    if(n==1)
-    {
-        Node*temp=*head;
-        *head=(*head)->next;
-        free(temp);
-        return 1;
-    }
-    Node*a=*head;
-    Node*b=(*head)->next;
-    int x=2;
-    while(b!=NULL&&x<n)
-    {
-        a=b;
-        b=b->next;
-        x++;
-    }
-    if(b==NULL)
-    {
-        return 0;
-    }
-    a->next=b->next;
-    free(b);
-    return 1;
-}
-
-
 
 
 int main()
@@ -293,18 +325,26 @@ int main()
 
     printf_list(head);
 
+    // if(update_node(head,20,99))
+    // {
+    //     printf("修改成功，链表变成\n");
+    //     printf_list(head);
+    // }
+    // else
+    // {
+    //     printf("没找到20\n");
+    // }
+
+    // if(delete_node(&head,2))
+    // {
+    //     printf("删除成功，链表变成：\n");
+    //     printf_list(head);
+    // }
 
 
-    if(delete_node(&head,2))
-    {
-        printf("删除成功，链表变成：\n");
-        printf_list(head);
-    }
-
-
-    delete_node(&head,1);
-    printf("删除头节点：\n");
-    printf_list(head);
+    // delete_node(&head,1);
+    // printf("删除头节点：\n");
+    // printf_list(head);
 
 
     // int c=find_node(head,20);
@@ -328,6 +368,10 @@ int main()
     //     printf("没有这个数据");
     // }
 
+
+    head=reverse_list(head);
+    printf("反转后的链表：\n");
+    printf_list(head);
     free_list(head);
 
     return 0;
